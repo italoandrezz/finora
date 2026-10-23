@@ -4,7 +4,7 @@
 
 Instale Git, Java 17 e Node.js 24 LTS; Docker e Compose são necessários para o ambiente integrado. Clone `https://github.com/italoandrezz/finora.git`, copie `.env.example` para `.env` e defina uma senha local. Não envie esse arquivo ao Git.
 
-O Maven Wrapper baixa o Maven 3.9.11 no primeiro uso. Execute os comandos Maven dentro de `backend/`. No Linux/macOS use `./mvnw`; no Windows use `.\mvnw.cmd`.
+O Maven Wrapper baixa o Maven 3.10.0 no primeiro uso. Execute os comandos Maven dentro de `backend/`. No Linux/macOS use `./mvnw`; no Windows use `.\mvnw.cmd`. O jsdom 30 exige Node 24.15+ na linha Node 24 usada pelo projeto.
 
 ## Execução
 
