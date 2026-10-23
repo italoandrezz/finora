@@ -19,9 +19,11 @@ Spring Boot 3.5 e Java 17 atendem ao requisito inicial. Spring Data JPA fornece 
 
 O frontend separa rotas, páginas, layouts, componentes, serviços e estilos. React Router controla navegação; Axios centraliza futuras requisições; Tailwind 4 é integrado diretamente ao Vite. Diretórios adicionais serão criados quando houver código que justifique sua existência.
 
-## Estratégia futura de multi-tenancy
+## Planejamento de domínio e multi-tenancy
 
-Antes das entidades financeiras, avaliar schema compartilhado com `tenant_id` obrigatório versus schema separado por empresa. A decisão deve considerar escala, custo, backup, obrigações de privacidade e migrações. Não há isolamento garantido nesta etapa porque nenhuma funcionalidade multiempresa foi implementada.
+O pedido da Fase 1 define PostgreSQL/schema compartilhados e `tenant_id` obrigatório para o negócio. O [planejamento multiempresa](architecture/multi-tenancy.md) propõe filtros autorizados e FKs compostas; RLS permanece em avaliação. Essas diretrizes não significam que o banco atual já implemente isolamento.
+
+A [documentação da Fase 1](README.md) reúne requisitos, inventário de 23 telas, escopo proposto, regras financeiras, cenários A–G, ER, dicionário e contratos REST. Decisões não explicitamente exigidas estão marcadas como propostas ou pendências; nenhuma entidade ou API de negócio foi implementada.
 
 O identificador da empresa deverá vir de contexto autenticado e autorizado, nunca ser aceito como autorização apenas por aparecer em um header ou corpo. Cada consulta, índice único, relacionamento, cache e tarefa assíncrona deverá preservar o contexto da empresa. Planejar testes negativos de acesso entre tenants e considerar Row Level Security como defesa adicional no PostgreSQL.
 

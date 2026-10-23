@@ -13,7 +13,7 @@ Plataforma SaaS de gestão financeira para lojas e pequenos negócios, desenvolv
 
 | Camada | Tecnologias |
 | --- | --- |
-| Backend | Java 17, Spring Boot 3.5.16, Maven 3.9.11 via Wrapper |
+| Backend | Java 17, Spring Boot 3.5.16, Maven 3.10.0 via Wrapper |
 | API e persistência | Spring Web, Data JPA, Validation, Security, Actuator, PostgreSQL 17, Flyway, Lombok |
 | Testes backend | JUnit 5, Mockito e Spring Security Test; H2 somente em testes |
 | Frontend | React 19, TypeScript 5.9, Vite 8, Tailwind CSS 4, React Router 7, Axios |
@@ -28,7 +28,7 @@ Ainda não implementadas: dashboard financeiro; vendas; clientes e produtos; con
 
 ## Arquitetura e estrutura
 
-Monorepo com frontend e backend independentes. A evolução seguirá um monólito modular com API REST e PostgreSQL. A estratégia de multi-tenancy será definida antes das entidades de negócio. Veja [arquitetura](docs/architecture.md).
+Monorepo com frontend e backend independentes. A evolução seguirá um monólito modular com API REST e PostgreSQL compartilhado, com isolamento lógico por tenant a implementar. Veja [arquitetura](docs/architecture.md) e a [Fase 1 — requisitos e modelagem financeira](docs/README.md), proposta documental baseada nas 23 telas do protótipo.
 
 ```text
 .github/         Workflows, Dependabot e templates
@@ -45,7 +45,7 @@ LICENSE          MIT
 
 - Git e acesso ao repositório.
 - Docker com Compose para executar o ambiente completo.
-- Java **17** e Node.js **24 LTS** para desenvolvimento fora dos containers.
+- Java **17** e Node.js **24 LTS, versão 24.15 ou superior**, para desenvolvimento fora dos containers (compatibilidade com jsdom 30).
 - Maven não precisa ser instalado: use o Wrapper em `backend/`.
 - Portas locais 5432, 8080 e 5173 disponíveis, ou alteradas no `.env`.
 
