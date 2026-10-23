@@ -1,0 +1,21 @@
+# Segredos e configuração local
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+# Builds e dependências
+**/target/
+**/node_modules/
+**/dist/
+**/coverage/
+*.tsbuildinfo
+*.log
+# IDE e sistema operacional
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

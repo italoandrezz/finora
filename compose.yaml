@@ -1,0 +1,60 @@
+name: finora
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-finora}
+      POSTGRES_USER: ${DB_USERNAME:?Copie .env.example para .env e defina DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Defina DB_PASSWORD no arquivo .env}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks: [database, database_host]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+  backend:
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-finora}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8080}:8080"
+    networks: [database, application]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      start_period: 40s
+      retries: 12
+  frontend:
+    build: ./frontend
+    environment:
+      API_PROXY_TARGET: http://backend:8080
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-5173}:5173"
+    networks: [application]
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5173').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+volumes:
+  postgres_data:
+networks:
+  database:
+    internal: true
+  # Permite acesso local pela porta publicada sem abrir a rede interna.
+  database_host:
+  application:
